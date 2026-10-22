@@ -5,7 +5,7 @@ import (
 	"log"
 	"bufio"
 	"strconv"
-	// "strings"
+	"strings"
 )
 
 func main() {
@@ -48,13 +48,19 @@ func handleConnection(conn net.Conn) {
 
 	buf := make([]string, 0, 1024)
 
-	for i := 0; i < len * 2; i++ {
+	for i := 0; i < len; i++ {
+		_, err := reader.ReadString('\n') // length of recvStr
+		if err != nil {
+			log.Printf("Message Reading Error: %v", err)
+			return
+		}
+
 		recvStr, err := reader.ReadString('\n')
 		if err != nil {
 			log.Printf("Message Reading Error: %v", err)
 			return
 		}
-		buf = append(buf, recvStr)
+		buf = append(buf, strings.TrimSpace(recvStr))
 	}
 
 	log.Printf("Hi!")
