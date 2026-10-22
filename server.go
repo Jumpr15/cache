@@ -1,6 +1,8 @@
 package main
 
 import (
+	"crache/cache"
+
 	"net"
 	"log"
 	"bufio"
@@ -61,6 +63,22 @@ func handleConnection(conn net.Conn) {
 			return
 		}
 		buf = append(buf, strings.TrimSpace(recvStr))
+	}
+
+	// switch case for resp command
+	switch buf[0] {
+	case "COMMAND":
+		if buf[1] == "DOCS" {
+			log.Printf("return summary")
+		} else {
+			log.Printf("unknown command")
+		}
+	case "GET":
+		cache.HandleGet()
+		log.Printf("get statement")
+	case "SET": 
+		cache.HandleSet()
+		log.Printf("set statement")
 	}
 
 	log.Printf("Hi!")
